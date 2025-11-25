@@ -1,3 +1,4 @@
+
 # 📊 Diagramas de Arquitectura & Saga – ECO RIDE LATAM
 
 > ⚠️ Nota: Todos los microservicios cargan su configuración desde **Config Server**, usando:
@@ -143,3 +144,8 @@ Crítico para la Saga y depende de Kafka + Eureka + Config Server.
 
 7️⃣ **Trip Service**  
 Depende de todos los anteriores (Kafka, Eureka, Config Server) para ejecutar la Saga completa.
+
+---
+## 👨🏼‍💻 Autores:
+**JONATHAN VEGA** , **BRAULIO TOVAR**
+
