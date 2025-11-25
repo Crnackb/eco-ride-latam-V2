@@ -112,7 +112,7 @@ sequenceDiagram
   end
 ```
 ---
-🚀 Resumen de microservicios (vía Gateway)
+## 🚀 Resumen de microservicios (vía Gateway)
 | Microservicio            | Rutas principales                              |Puertos |
 | ------------------------ | ---------------------------------------------- |--------|
 | **trip-service**         | `/trips/**`, `/reservations/**`                |8082    |
@@ -121,3 +121,25 @@ sequenceDiagram
 | **notification-service** | `/notifications/**`                            |8085    |
 | **Gateway actuator**     | `/actuator/**`                                 |8080    |
 ---
+## 🧱 Orden de ejecución recomendado
+
+1️⃣ **Discovery Service**  
+Servicio de registro (Eureka). Todos los demás dependen de él.  
+
+2️⃣ **Config Server**  
+Debe iniciar después de Eureka, ya que todos los servicios cargarán su configuración desde aquí.  
+
+3️⃣ **API Gateway**  
+Depende de Eureka + Config Server.  
+
+4️⃣ **Notification Service**  
+Usa Config Server + Eureka y escucha eventos Kafka.  
+
+5️⃣ **Passenger Service**  
+Carga configuración y se registra en Eureka.  
+
+6️⃣ **Payment Service**  
+Crítico para la Saga y depende de Kafka + Eureka + Config Server.  
+
+7️⃣ **Trip Service**  
+Depende de todos los anteriores (Kafka, Eureka, Config Server) para ejecutar la Saga completa.
