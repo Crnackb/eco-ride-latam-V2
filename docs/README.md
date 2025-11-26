@@ -1,5 +1,17 @@
+# 🚕 Eco Ride Latam V2
 
-# 📊 Diagramas de Arquitectura & Saga – ECO RIDE LATAM
+Bienvenido a **Eco Ride Latam V2**, una plataforma de transporte basada en una arquitectura de microservicios resiliente y escalable.
+
+
+## 📚 Documentación
+
+Hemos preparado guías detalladas para ayudarte a entender, ejecutar y desplegar el proyecto:
+
+*   **🛠️ [Guía de Instalación y Configuración](SETUP_GUIDE.md)**: Pasos paso a paso para ejecutar el proyecto localmente.
+*   **📡 [Referencia de API](API_REFERENCE.md)**: Documentación de los endpoints principales de cada microservicio.
+*   **🚢 [Guía de Despliegue](DEPLOYMENT.md)**: Instrucciones para desplegar usando Docker y Docker Compose.
+
+---
 
 > ⚠️ Nota: Todos los microservicios cargan su configuración desde **Config Server**, usando:
 >
@@ -10,9 +22,8 @@
 > Cada microservicio tiene su propio archivo en:
 > `/config/<service-name>.yml` dentro del config-server.
 
----
+## 🏗️ Arquitectura General
 
-## 🏗️ Arquitectura General (Microservicios + Infraestructura)
 
 ```mermaid
 graph LR
@@ -72,8 +83,12 @@ graph LR
   LOKI --> GRAF
   ZIP --> GRAF
 ```
+
 ---
-## 🔁 Diagrama de Saga de Reserva (Mermaid)
+
+## 🔁 Patrón Saga (Reserva de Viajes)
+
+Gestionamos la consistencia de datos distribuidos mediante el patrón **Saga Orquestada** (vía Kafka).
 
 ```mermaid
 sequenceDiagram
@@ -112,16 +127,25 @@ sequenceDiagram
     NOTI->>U: Enviar notificación de fallo
   end
 ```
+
 ---
-## 🚀 Resumen de microservicios (vía Gateway)
-| Microservicio            | Rutas principales                              |Puertos |
-| ------------------------ | ---------------------------------------------- |--------|
-| **trip-service**         | `/trips/**`, `/reservations/**`                |8082    |
-| **passenger-service**    | `/passengers/**`, `/drivers/**`, `/ratings/**` |8083    |
-| **payment-service**      | `/payments/**`, `/charges/**`, `/refunds/**`   |8084    |
-| **notification-service** | `/notifications/**`                            |8085    |
-| **Gateway actuator**     | `/actuator/**`                                 |8080    |
+
+## 🚀 Servicios Principales
+
+| Microservicio | Puerto | Descripción |
+| :--- | :--- | :--- |
+| **API Gateway** | `8080` | Punto de entrada único. |
+| **Trip Service** | `8082` | Gestión de viajes y orquestación de Sagas. |
+| **Passenger Service** | `8083` | Gestión de usuarios y conductores. |
+| **Payment Service** | `8084` | Procesamiento de pagos. |
+| **Notification Service** | `8085` | Envío de correos y notificaciones. |
+| **Discovery Server** | `8761` | Eureka Server. |
+| **Config Server** | `8888` | Configuración centralizada. |
+
+Para más detalles sobre los endpoints, consulta la [Referencia de API](API_REFERENCE.md).
+
 ---
+
 ## 🧱 Orden de ejecución recomendado
 
 1️⃣ **Discovery Service**  
@@ -146,6 +170,6 @@ Crítico para la Saga y depende de Kafka + Eureka + Config Server.
 Depende de todos los anteriores (Kafka, Eureka, Config Server) para ejecutar la Saga completa.
 
 ---
-## 👨🏼‍💻 Autores:
-**JONATHAN VEGA** , **BRAULIO TOVAR**
 
+## 👨🏼‍💻 Autores
+**JONATHAN VEGA** , **BRAULIO TOVAR**
